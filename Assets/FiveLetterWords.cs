@@ -24,6 +24,7 @@ public class FiveLetterWords : MonoBehaviour
     private bool Playable = false;
 
     private int[] TheValues = { 0, 0, 0 };
+	private string[] TheNames = {"", "", ""};
 
     // Logging
     static int moduleIdCounter = 1;
@@ -50,6 +51,7 @@ public class FiveLetterWords : MonoBehaviour
         int Stent = 0;
         for (int i = 0; i < 3; i++)
         {
+			TheNames[i] = TheAnswer[Stent];
             WordDex[Stent].text = TheAnswer[Stent];
             int Gnomon = 0;
             for (int a = 0; a < 5; a++)
@@ -163,12 +165,14 @@ public class FiveLetterWords : MonoBehaviour
 
         else
         {
+			Debug.LogFormat("[Five Letter Words #{0}] The words are: {1}", moduleId, string.Join(", ", TheNames.Select(x => x.ToString()).ToArray()));
             Debug.LogFormat("[Five Letter Words #{0}] The word scores are: {1}", moduleId, string.Join(", ", TheValues.Select(x => x.ToString()).ToArray()));
         }
     }
 
     void Number0()
     {
+		Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[0], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[0] > TheValues[1]) && (TheValues[0] > TheValues[2]))
         {
@@ -207,6 +211,7 @@ public class FiveLetterWords : MonoBehaviour
 
     void Number1()
     {
+		Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[1], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[1] > TheValues[0]) && (TheValues[1] > TheValues[2]))
         {
@@ -245,6 +250,7 @@ public class FiveLetterWords : MonoBehaviour
 
     void Number2()
     {
+		Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[2], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[2] > TheValues[0]) && (TheValues[2] > TheValues[1]))
         {
@@ -312,6 +318,7 @@ public class FiveLetterWords : MonoBehaviour
         }
         Module.HandlePass();
         Audio.PlaySoundAtTransform(SFX[2].name, transform);
+		Debug.LogFormat("[Five Letter Words #{0}] Correct! Module solved.", moduleId);
     }
 
     IEnumerator RouletteWrong()
@@ -348,6 +355,7 @@ public class FiveLetterWords : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
 
         Module.HandleStrike();
+		Debug.LogFormat("[Five Letter Words #{0}] Incorrect! Strike! Module resetting...", moduleId);
 
         int Chili = 0;
         for (int m = 0; m < 3; m++)
@@ -375,7 +383,7 @@ public class FiveLetterWords : MonoBehaviour
             Disabler[Heaven].SetActive(true);
             Heaven++;
         }
-
+		
         TheValues[0] = 0; TheValues[1] = 0; TheValues[2] = 0;
         BombAnswer();
     }
