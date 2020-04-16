@@ -87,7 +87,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4860506867781800}
   m_Layer: 0
-  m_Name: Ancillery
+  m_Name: Ancillary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
