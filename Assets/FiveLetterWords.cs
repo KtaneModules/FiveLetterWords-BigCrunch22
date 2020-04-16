@@ -22,7 +22,7 @@ public class FiveLetterWords : MonoBehaviour
     public TextAsset FiverData;
 
     private int[] TheValues = { 0, 0, 0 };
-	private string[] TheNames = {"", "", ""};
+    private string[] TheNames = { "", "", "" };
 
     // Logging
     static int moduleIdCounter = 1;
@@ -47,7 +47,7 @@ public class FiveLetterWords : MonoBehaviour
         string[] TheAnswer = JsonConvert.DeserializeObject<string[]>(FiverData.text).Shuffle();
         for (int i = 0; i < 3; i++)
         {
-			TheNames[i] = TheAnswer[i];
+            TheNames[i] = TheAnswer[i];
             WordDex[i].text = TheAnswer[i];
             for (int j = 0; j < 5; j++)
             {
@@ -158,14 +158,14 @@ public class FiveLetterWords : MonoBehaviour
 
         else
         {
-			Debug.LogFormat("[Five Letter Words #{0}] The words are: {1}", moduleId, string.Join(", ", TheNames.Select(x => x.ToString()).ToArray()));
+            Debug.LogFormat("[Five Letter Words #{0}] The words are: {1}", moduleId, string.Join(", ", TheNames.Select(x => x.ToString()).ToArray()));
             Debug.LogFormat("[Five Letter Words #{0}] The word scores are: {1}", moduleId, string.Join(", ", TheValues.Select(x => x.ToString()).ToArray()));
         }
     }
 
     void Number0()
     {
-		Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[0], (((int)Bomb.GetTime()) % 60).ToString());
+        Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[0], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[0] > TheValues[1]) && (TheValues[0] > TheValues[2]))
         {
@@ -204,7 +204,7 @@ public class FiveLetterWords : MonoBehaviour
 
     void Number1()
     {
-		Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[1], (((int)Bomb.GetTime()) % 60).ToString());
+        Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[1], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[1] > TheValues[0]) && (TheValues[1] > TheValues[2]))
         {
@@ -243,7 +243,7 @@ public class FiveLetterWords : MonoBehaviour
 
     void Number2()
     {
-		Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[2], (((int)Bomb.GetTime()) % 60).ToString());
+        Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[2], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[2] > TheValues[0]) && (TheValues[2] > TheValues[1]))
         {
@@ -300,7 +300,7 @@ public class FiveLetterWords : MonoBehaviour
         }
         Module.HandlePass();
         Audio.PlaySoundAtTransform(SFX[2].name, transform);
-		Debug.LogFormat("[Five Letter Words #{0}] Correct! Module solved.", moduleId);
+        Debug.LogFormat("[Five Letter Words #{0}] Correct! Module solved.", moduleId);
     }
 
     IEnumerator RouletteWrong()
@@ -326,7 +326,7 @@ public class FiveLetterWords : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
 
         Module.HandleStrike();
-		Debug.LogFormat("[Five Letter Words #{0}] Incorrect! Strike! Module resetting...", moduleId);
+        Debug.LogFormat("[Five Letter Words #{0}] Incorrect! Strike! Module resetting...", moduleId);
 
         foreach (TextMesh t in WordDex)
         {
