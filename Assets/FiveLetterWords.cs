@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using UnityEngine;
 using KModkit;
 
-
 public class FiveLetterWords : MonoBehaviour
 {
 
@@ -21,10 +20,9 @@ public class FiveLetterWords : MonoBehaviour
 
     public TextMesh[] WordDex;
     public TextAsset FiverData;
-    private bool Playable = false;
 
     private int[] TheValues = { 0, 0, 0 };
-	private string[] TheNames = {"", "", ""};
+    private string[] TheNames = { "", "", "" };
 
     // Logging
     static int moduleIdCounter = 1;
@@ -46,115 +44,110 @@ public class FiveLetterWords : MonoBehaviour
 
     void BombAnswer()
     {
-        Playable = true;
         string[] TheAnswer = JsonConvert.DeserializeObject<string[]>(FiverData.text).Shuffle();
-        int Stent = 0;
         for (int i = 0; i < 3; i++)
         {
-			TheNames[i] = TheAnswer[Stent];
-            WordDex[Stent].text = TheAnswer[Stent];
-            int Gnomon = 0;
-            for (int a = 0; a < 5; a++)
+            TheNames[i] = TheAnswer[i];
+            WordDex[i].text = TheAnswer[i];
+            for (int j = 0; j < 5; j++)
             {
                 if (Bomb.GetIndicators().Count() > 3 || Bomb.GetPortCount() > 3 || Bomb.GetBatteryCount() > 3 || Bomb.GetPortPlates().Count() > 3)
                 {
-                    if (TheAnswer[Stent][Gnomon].ToString() == "E" || TheAnswer[Stent][Gnomon].ToString() == "S" || TheAnswer[Stent][Gnomon].ToString() == "X")
+                    if (TheAnswer[i][j].ToString() == "E" || TheAnswer[i][j].ToString() == "S" || TheAnswer[i][j].ToString() == "X")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 1;
+                        TheValues[i] = TheValues[i] + 1;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "A" || TheAnswer[Stent][Gnomon].ToString() == "K" || TheAnswer[Stent][Gnomon].ToString() == "N")
+                    else if (TheAnswer[i][j].ToString() == "A" || TheAnswer[i][j].ToString() == "K" || TheAnswer[i][j].ToString() == "N")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 2;
+                        TheValues[i] = TheValues[i] + 2;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "C" || TheAnswer[Stent][Gnomon].ToString() == "H" || TheAnswer[Stent][Gnomon].ToString() == "V" || TheAnswer[Stent][Gnomon].ToString() == "Z")
+                    else if (TheAnswer[i][j].ToString() == "C" || TheAnswer[i][j].ToString() == "H" || TheAnswer[i][j].ToString() == "V" || TheAnswer[i][j].ToString() == "Z")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 3;
+                        TheValues[i] = TheValues[i] + 3;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "T" || TheAnswer[Stent][Gnomon].ToString() == "Y")
+                    else if (TheAnswer[i][j].ToString() == "T" || TheAnswer[i][j].ToString() == "Y")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 4;
+                        TheValues[i] = TheValues[i] + 4;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "F" || TheAnswer[Stent][Gnomon].ToString() == "P" || TheAnswer[Stent][Gnomon].ToString() == "R" || TheAnswer[Stent][Gnomon].ToString() == "W")
+                    else if (TheAnswer[i][j].ToString() == "F" || TheAnswer[i][j].ToString() == "P" || TheAnswer[i][j].ToString() == "R" || TheAnswer[i][j].ToString() == "W")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 5;
+                        TheValues[i] = TheValues[i] + 5;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "B" || TheAnswer[Stent][Gnomon].ToString() == "G" || TheAnswer[Stent][Gnomon].ToString() == "L")
+                    else if (TheAnswer[i][j].ToString() == "B" || TheAnswer[i][j].ToString() == "G" || TheAnswer[i][j].ToString() == "L")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 6;
+                        TheValues[i] = TheValues[i] + 6;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "I")
+                    else if (TheAnswer[i][j].ToString() == "I")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 7;
+                        TheValues[i] = TheValues[i] + 7;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "D" || TheAnswer[Stent][Gnomon].ToString() == "J" || TheAnswer[Stent][Gnomon].ToString() == "M")
+                    else if (TheAnswer[i][j].ToString() == "D" || TheAnswer[i][j].ToString() == "J" || TheAnswer[i][j].ToString() == "M")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 8;
+                        TheValues[i] = TheValues[i] + 8;
                     }
 
                     else
                     {
-                        TheValues[Stent] = TheValues[Stent] + 9;
+                        TheValues[i] = TheValues[i] + 9;
                     }
 
                 }
 
                 else
                 {
-                    if (TheAnswer[Stent][Gnomon].ToString() == "F" || TheAnswer[Stent][Gnomon].ToString() == "K" || TheAnswer[Stent][Gnomon].ToString() == "Y")
+                    if (TheAnswer[i][j].ToString() == "F" || TheAnswer[i][j].ToString() == "K" || TheAnswer[i][j].ToString() == "Y")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 1;
+                        TheValues[i] = TheValues[i] + 1;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "N" || TheAnswer[Stent][Gnomon].ToString() == "W" || TheAnswer[Stent][Gnomon].ToString() == "X" || TheAnswer[Stent][Gnomon].ToString() == "Y")
+                    else if (TheAnswer[i][j].ToString() == "N" || TheAnswer[i][j].ToString() == "W" || TheAnswer[i][j].ToString() == "X" || TheAnswer[i][j].ToString() == "Y")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 2;
+                        TheValues[i] = TheValues[i] + 2;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "H" || TheAnswer[Stent][Gnomon].ToString() == "L" || TheAnswer[Stent][Gnomon].ToString() == "Q")
+                    else if (TheAnswer[i][j].ToString() == "H" || TheAnswer[i][j].ToString() == "L" || TheAnswer[i][j].ToString() == "Q")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 3;
+                        TheValues[i] = TheValues[i] + 3;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "A" || TheAnswer[Stent][Gnomon].ToString() == "C")
+                    else if (TheAnswer[i][j].ToString() == "A" || TheAnswer[i][j].ToString() == "C")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 4;
+                        TheValues[i] = TheValues[i] + 4;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "G" || TheAnswer[Stent][Gnomon].ToString() == "S" || TheAnswer[Stent][Gnomon].ToString() == "U")
+                    else if (TheAnswer[i][j].ToString() == "G" || TheAnswer[i][j].ToString() == "S" || TheAnswer[i][j].ToString() == "U")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 5;
+                        TheValues[i] = TheValues[i] + 5;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "D" || TheAnswer[Stent][Gnomon].ToString() == "I" || TheAnswer[Stent][Gnomon].ToString() == "V")
+                    else if (TheAnswer[i][j].ToString() == "D" || TheAnswer[i][j].ToString() == "I" || TheAnswer[i][j].ToString() == "V")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 6;
+                        TheValues[i] = TheValues[i] + 6;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "J" || TheAnswer[Stent][Gnomon].ToString() == "M" || TheAnswer[Stent][Gnomon].ToString() == "O")
+                    else if (TheAnswer[i][j].ToString() == "J" || TheAnswer[i][j].ToString() == "M" || TheAnswer[i][j].ToString() == "O")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 7;
+                        TheValues[i] = TheValues[i] + 7;
                     }
 
-                    else if (TheAnswer[Stent][Gnomon].ToString() == "B" || TheAnswer[Stent][Gnomon].ToString() == "P" || TheAnswer[Stent][Gnomon].ToString() == "R")
+                    else if (TheAnswer[i][j].ToString() == "B" || TheAnswer[i][j].ToString() == "P" || TheAnswer[i][j].ToString() == "R")
                     {
-                        TheValues[Stent] = TheValues[Stent] + 8;
+                        TheValues[i] = TheValues[i] + 8;
                     }
 
                     else
                     {
-                        TheValues[Stent] = TheValues[Stent] + 9;
+                        TheValues[i] = TheValues[i] + 9;
                     }
                 }
-                Gnomon++;
             }
-            Stent++;
         }
 
         if ((TheValues[0] == TheValues[1]) || (TheValues[0] == TheValues[2]) || (TheValues[1] == TheValues[2]))
@@ -165,14 +158,14 @@ public class FiveLetterWords : MonoBehaviour
 
         else
         {
-			Debug.LogFormat("[Five Letter Words #{0}] The words are: {1}", moduleId, string.Join(", ", TheNames.Select(x => x.ToString()).ToArray()));
+            Debug.LogFormat("[Five Letter Words #{0}] The words are: {1}", moduleId, string.Join(", ", TheNames.Select(x => x.ToString()).ToArray()));
             Debug.LogFormat("[Five Letter Words #{0}] The word scores are: {1}", moduleId, string.Join(", ", TheValues.Select(x => x.ToString()).ToArray()));
         }
     }
 
     void Number0()
     {
-		Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[0], (((int)Bomb.GetTime()) % 60).ToString());
+        Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[0], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[0] > TheValues[1]) && (TheValues[0] > TheValues[2]))
         {
@@ -211,7 +204,7 @@ public class FiveLetterWords : MonoBehaviour
 
     void Number1()
     {
-		Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[1], (((int)Bomb.GetTime()) % 60).ToString());
+        Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[1], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[1] > TheValues[0]) && (TheValues[1] > TheValues[2]))
         {
@@ -250,7 +243,7 @@ public class FiveLetterWords : MonoBehaviour
 
     void Number2()
     {
-		Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[2], (((int)Bomb.GetTime()) % 60).ToString());
+        Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[2], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[2] > TheValues[0]) && (TheValues[2] > TheValues[1]))
         {
@@ -289,102 +282,104 @@ public class FiveLetterWords : MonoBehaviour
 
     IEnumerator RouletteCheck()
     {
-        int Hell = 0;
-        for (int q = 0; q < 3; q++)
-        {
-            Disabler[Hell].SetActive(false);
-            Hell++;
-        }
+        foreach (GameObject d in Disabler)
+            d.SetActive(false);
 
         string[] TheAnswer = JsonConvert.DeserializeObject<string[]>(FiverData.text).Shuffle();
-        for (int d = 0; d < 100; d++)
+        for (int i = 0; i < 100; i++)
         {
-            int Coal = 0;
-            for (int f = 0; f < 3; f++)
-            {
-                int Celve = UnityEngine.Random.Range(0, TheAnswer.Length);
-                WordDex[Coal].text = TheAnswer[Celve];
-                Coal++;
-            }
+            foreach (TextMesh t in WordDex)
+                t.text = TheAnswer.PickRandom();
             yield return new WaitForSecondsRealtime(0.01f);
         }
 
-        int Chill = 0;
-        for (int m = 0; m < 3; m++)
+        foreach (TextMesh t in WordDex)
         {
-            WordDex[Chill].text = "YES!";
-            WordDex[Chill].color = Color.green;
-            Chill++;
+            t.text = "YES!";
+            t.color = Color.green;
         }
         Module.HandlePass();
+        ModuleSolved = true;
         Audio.PlaySoundAtTransform(SFX[2].name, transform);
-		Debug.LogFormat("[Five Letter Words #{0}] Correct! Module solved.", moduleId);
+        Debug.LogFormat("[Five Letter Words #{0}] Correct! Module solved.", moduleId);
     }
 
     IEnumerator RouletteWrong()
     {
-        int Hell = 0;
-        for (int q = 0; q < 3; q++)
-        {
-            Disabler[Hell].SetActive(false);
-            Hell++;
-        }
+        foreach (GameObject d in Disabler)
+            d.SetActive(false);
 
         string[] TheAnswer = JsonConvert.DeserializeObject<string[]>(FiverData.text).Shuffle();
-        for (int d = 0; d < 100; d++)
+        for (int i = 0; i < 100; i++)
         {
-            int Coal = 0;
-            for (int f = 0; f < 3; f++)
-            {
-                int Celve = UnityEngine.Random.Range(0, TheAnswer.Length);
-                WordDex[Coal].text = TheAnswer[Celve];
-                Coal++;
-            }
+            foreach (TextMesh t in WordDex)
+                t.text = TheAnswer.PickRandom();
             yield return new WaitForSecondsRealtime(0.01f);
         }
 
-        int Chill = 0;
-        for (int m = 0; m < 3; m++)
+        foreach (TextMesh t in WordDex)
         {
-            WordDex[Chill].text = "NO!";
-            WordDex[Chill].color = Color.red;
-            Chill++;
+            t.text = "NO!";
+            t.color = Color.red;
         }
 
         Audio.PlaySoundAtTransform(SFX[1].name, transform);
         yield return new WaitForSecondsRealtime(0.5f);
 
         Module.HandleStrike();
-		Debug.LogFormat("[Five Letter Words #{0}] Incorrect! Strike! Module resetting...", moduleId);
+        Debug.LogFormat("[Five Letter Words #{0}] Incorrect! Strike! Module resetting...", moduleId);
 
-        int Chili = 0;
-        for (int m = 0; m < 3; m++)
+        foreach (TextMesh t in WordDex)
         {
-            WordDex[Chili].color = Color.white;
-            Chili++;
+            t.color = Color.white;
         }
 
         string[] TheAnswerGenerates = JsonConvert.DeserializeObject<string[]>(FiverData.text).Shuffle();
-        for (int d = 0; d < 50; d++)
+        for (int i = 0; i < 50; i++)
         {
-            int Cola = 0;
-            for (int f = 0; f < 3; f++)
-            {
-                int Celvo = UnityEngine.Random.Range(0, TheAnswerGenerates.Length);
-                WordDex[Cola].text = TheAnswerGenerates[Celvo];
-                Cola++;
-            }
+            foreach (TextMesh t in WordDex)
+                t.text = TheAnswerGenerates.PickRandom();
             yield return new WaitForSecondsRealtime(0.01f);
         }
 
-        int Heaven = 0;
-        for (int q = 0; q < 3; q++)
-        {
-            Disabler[Heaven].SetActive(true);
-            Heaven++;
-        }
-		
+        foreach (GameObject d in Disabler)
+            d.SetActive(true);
+
         TheValues[0] = 0; TheValues[1] = 0; TheValues[2] = 0;
         BombAnswer();
+    }
+
+    // Twitch Plays
+    #pragma warning disable 414
+    private readonly string TwitchHelpMessage = "!{0} press <top/middle/bottom> <#> [Presses the button in that position when the last two digits of the timer are #.]";
+    #pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string input)
+    {
+        var cmd = input.ToLowerInvariant().Split(' ').ToArray();
+        if (cmd.Length != 3)
+            yield break;
+        var numbers = Enumerable.Range(0, 60).Select(x => x.ToString()).ToArray();
+        var positions = new string[] { "top", "middle", "bottom" };
+        if (cmd[0] != "press" || !positions.Contains(cmd[1]) || !numbers.Contains(cmd[2]))
+            yield break;
+        while ((((int)Bomb.GetTime()) % 60) != Array.IndexOf(numbers, cmd[2]))
+            yield return null;
+        yield return null;
+        Selectables[Array.IndexOf(positions, cmd[1])].OnInteract();
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        var mx = Array.IndexOf(TheValues, TheValues.Max());
+        var mn = TheValues.Min();
+        while ((((int)Bomb.GetTime()) % 60) != mn)
+            yield return null;
+        Selectables[mx].OnInteract();
+        while (!ModuleSolved)
+        {
+            yield return null;
+            yield return new WaitForSeconds(.1f);
+        }
     }
 }
