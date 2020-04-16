@@ -299,6 +299,7 @@ public class FiveLetterWords : MonoBehaviour
             t.color = Color.green;
         }
         Module.HandlePass();
+        ModuleSolved = true;
         Audio.PlaySoundAtTransform(SFX[2].name, transform);
         Debug.LogFormat("[Five Letter Words #{0}] Correct! Module solved.", moduleId);
     }
@@ -346,5 +347,39 @@ public class FiveLetterWords : MonoBehaviour
 
         TheValues[0] = 0; TheValues[1] = 0; TheValues[2] = 0;
         BombAnswer();
+    }
+
+    // Twitch Plays
+    #pragma warning disable 414
+    private readonly string TwitchHelpMessage = "!{0} press <top/middle/bottom> <#> [Presses the button in that position when the last two digits of the timer are #.]";
+    #pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string input)
+    {
+        var cmd = input.ToLowerInvariant().Split(' ').ToArray();
+        if (cmd.Length != 3)
+            yield break;
+        var numbers = Enumerable.Range(0, 60).Select(x => x.ToString()).ToArray();
+        var positions = new string[] { "top", "middle", "bottom" };
+        if (cmd[0] != "press" || !positions.Contains(cmd[1]) || !numbers.Contains(cmd[2]))
+            yield break;
+        while ((((int)Bomb.GetTime()) % 60) != Array.IndexOf(numbers, cmd[2]))
+            yield return null;
+        yield return null;
+        Selectables[Array.IndexOf(positions, cmd[1])].OnInteract();
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        var mx = Array.IndexOf(TheValues, TheValues.Max());
+        var mn = TheValues.Min();
+        while ((((int)Bomb.GetTime()) % 60) != mn)
+            yield return null;
+        Selectables[mx].OnInteract();
+        while (!ModuleSolved)
+        {
+            yield return null;
+            yield return new WaitForSeconds(.1f);
+        }
     }
 }
