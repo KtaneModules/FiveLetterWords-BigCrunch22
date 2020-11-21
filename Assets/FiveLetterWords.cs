@@ -39,128 +39,134 @@ public class FiveLetterWords : MonoBehaviour
 
     void Start()
     {
-        Module.OnActivate += BombAnswer;
+        BombAnswer();
     }
 
     void BombAnswer()
     {
-        string[] TheAnswer = JsonConvert.DeserializeObject<string[]>(FiverData.text).Shuffle();
-        for (int i = 0; i < 3; i++)
-        {
-            TheNames[i] = TheAnswer[i];
-            WordDex[i].text = TheAnswer[i];
-            for (int j = 0; j < 5; j++)
-            {
-                if (Bomb.GetIndicators().Count() > 3 || Bomb.GetPortCount() > 3 || Bomb.GetBatteryCount() > 3 || Bomb.GetPortPlates().Count() > 3)
-                {
-                    if (TheAnswer[i][j].ToString() == "E" || TheAnswer[i][j].ToString() == "S" || TheAnswer[i][j].ToString() == "X")
-                    {
-                        TheValues[i] = TheValues[i] + 1;
-                    }
+		do
+		{
+			TheValues = new int[] { 0, 0, 0 };
+			string[] TheAnswer = JsonConvert.DeserializeObject<string[]>(FiverData.text).Shuffle();
+			for (int i = 0; i < 3; i++)
+			{
+				TheNames[i] = TheAnswer[i];
+				WordDex[i].text = TheAnswer[i];
+				for (int j = 0; j < 5; j++)
+				{
+					if (Bomb.GetIndicators().Count() > 3 || Bomb.GetPortCount() > 3 || Bomb.GetBatteryCount() > 3 || Bomb.GetPortPlates().Count() > 3)
+					{
+						switch (TheAnswer[i][j].ToString())
+						{
+							case "E":
+							case "S":
+							case "X":
+								TheValues[i] = TheValues[i] + 1;
+								break;
+							case "A":
+							case "K":
+							case "N":
+								TheValues[i] = TheValues[i] + 2;
+								break;
+							case "C":
+							case "H":
+							case "V":
+							case "Z":
+								TheValues[i] = TheValues[i] + 3;
+								break;
+							case "T":
+							case "Y":
+								TheValues[i] = TheValues[i] + 4;
+								break;
+							case "F":
+							case "P":
+							case "R":
+							case "W":
+								TheValues[i] = TheValues[i] + 5;
+								break;
+							case "B":
+							case "G":
+							case "L":
+								TheValues[i] = TheValues[i] + 6;
+								break;
+							case "I":
+								TheValues[i] = TheValues[i] + 7;
+								break;
+							case "D":
+							case "J":
+							case "M":
+								TheValues[i] = TheValues[i] + 8;
+								break;
+							case "O":
+							case "Q":
+							case "U":
+								TheValues[i] = TheValues[i] + 9;
+								break;
+							default:
+								break;
+						}
 
-                    else if (TheAnswer[i][j].ToString() == "A" || TheAnswer[i][j].ToString() == "K" || TheAnswer[i][j].ToString() == "N")
-                    {
-                        TheValues[i] = TheValues[i] + 2;
-                    }
+					}
 
-                    else if (TheAnswer[i][j].ToString() == "C" || TheAnswer[i][j].ToString() == "H" || TheAnswer[i][j].ToString() == "V" || TheAnswer[i][j].ToString() == "Z")
-                    {
-                        TheValues[i] = TheValues[i] + 3;
-                    }
+					else
+					{
+						switch (TheAnswer[i][j].ToString())
+						{
+							case "F":
+							case "K":
+							case "Y":
+								TheValues[i] = TheValues[i] + 1;
+								break;
+							case "N":
+							case "W":
+							case "X":
+							case "Z":
+								TheValues[i] = TheValues[i] + 2;
+								break;
+							case "H":
+							case "L":
+							case "Q":
+								TheValues[i] = TheValues[i] + 3;
+								break;
+							case "A":
+							case "C":
+								TheValues[i] = TheValues[i] + 4;
+								break;
+							case "G":
+							case "S":
+							case "U":
+								TheValues[i] = TheValues[i] + 5;
+								break;
+							case "D":
+							case "I":
+							case "V":
+								TheValues[i] = TheValues[i] + 6;
+								break;
+							case "J":
+							case "M":
+							case "O":
+								TheValues[i] = TheValues[i] + 7;
+								break;
+							case "B":
+							case "P":
+							case "R":
+								TheValues[i] = TheValues[i] + 8;
+								break;
+							case "E":
+							case "T":
+								TheValues[i] = TheValues[i] + 9;
+								break;
+							default:
+								break;
+						}
+					}
+				}
+			}
+		}
+		while ((TheValues[0] == TheValues[1]) || (TheValues[0] == TheValues[2]) || (TheValues[1] == TheValues[2]));
 
-                    else if (TheAnswer[i][j].ToString() == "T" || TheAnswer[i][j].ToString() == "Y")
-                    {
-                        TheValues[i] = TheValues[i] + 4;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "F" || TheAnswer[i][j].ToString() == "P" || TheAnswer[i][j].ToString() == "R" || TheAnswer[i][j].ToString() == "W")
-                    {
-                        TheValues[i] = TheValues[i] + 5;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "B" || TheAnswer[i][j].ToString() == "G" || TheAnswer[i][j].ToString() == "L")
-                    {
-                        TheValues[i] = TheValues[i] + 6;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "I")
-                    {
-                        TheValues[i] = TheValues[i] + 7;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "D" || TheAnswer[i][j].ToString() == "J" || TheAnswer[i][j].ToString() == "M")
-                    {
-                        TheValues[i] = TheValues[i] + 8;
-                    }
-
-                    else
-                    {
-                        TheValues[i] = TheValues[i] + 9;
-                    }
-
-                }
-
-                else
-                {
-                    if (TheAnswer[i][j].ToString() == "F" || TheAnswer[i][j].ToString() == "K" || TheAnswer[i][j].ToString() == "Y")
-                    {
-                        TheValues[i] = TheValues[i] + 1;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "N" || TheAnswer[i][j].ToString() == "W" || TheAnswer[i][j].ToString() == "X" || TheAnswer[i][j].ToString() == "Y")
-                    {
-                        TheValues[i] = TheValues[i] + 2;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "H" || TheAnswer[i][j].ToString() == "L" || TheAnswer[i][j].ToString() == "Q")
-                    {
-                        TheValues[i] = TheValues[i] + 3;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "A" || TheAnswer[i][j].ToString() == "C")
-                    {
-                        TheValues[i] = TheValues[i] + 4;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "G" || TheAnswer[i][j].ToString() == "S" || TheAnswer[i][j].ToString() == "U")
-                    {
-                        TheValues[i] = TheValues[i] + 5;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "D" || TheAnswer[i][j].ToString() == "I" || TheAnswer[i][j].ToString() == "V")
-                    {
-                        TheValues[i] = TheValues[i] + 6;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "J" || TheAnswer[i][j].ToString() == "M" || TheAnswer[i][j].ToString() == "O")
-                    {
-                        TheValues[i] = TheValues[i] + 7;
-                    }
-
-                    else if (TheAnswer[i][j].ToString() == "B" || TheAnswer[i][j].ToString() == "P" || TheAnswer[i][j].ToString() == "R")
-                    {
-                        TheValues[i] = TheValues[i] + 8;
-                    }
-
-                    else
-                    {
-                        TheValues[i] = TheValues[i] + 9;
-                    }
-                }
-            }
-        }
-
-        if ((TheValues[0] == TheValues[1]) || (TheValues[0] == TheValues[2]) || (TheValues[1] == TheValues[2]))
-        {
-            TheValues[0] = 0; TheValues[1] = 0; TheValues[2] = 0;
-            BombAnswer();
-        }
-
-        else
-        {
-            Debug.LogFormat("[Five Letter Words #{0}] The words are: {1}", moduleId, string.Join(", ", TheNames.Select(x => x.ToString()).ToArray()));
-            Debug.LogFormat("[Five Letter Words #{0}] The word scores are: {1}", moduleId, string.Join(", ", TheValues.Select(x => x.ToString()).ToArray()));
-        }
+		Debug.LogFormat("[Five Letter Words #{0}] The words are: {1}", moduleId, string.Join(", ", TheNames.Select(x => x.ToString()).ToArray()));
+		Debug.LogFormat("[Five Letter Words #{0}] The word scores are: {1}", moduleId, string.Join(", ", TheValues.Select(x => x.ToString()).ToArray()));
     }
 
     void Number0()
