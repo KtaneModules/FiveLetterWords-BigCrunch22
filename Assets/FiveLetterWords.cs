@@ -23,6 +23,8 @@ public class FiveLetterWords : MonoBehaviour
 
     private int[] TheValues = { 0, 0, 0 };
     private string[] TheNames = { "", "", "" };
+    private bool StrikeIncoming = false;
+    private bool SolveIncoming = false;
 
     // Logging
     static int moduleIdCounter = 1;
@@ -171,6 +173,7 @@ public class FiveLetterWords : MonoBehaviour
 
     void Number0()
     {
+        if (!Disabler[0].activeSelf) return;
         Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[0], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[0] > TheValues[1]) && (TheValues[0] > TheValues[2]))
@@ -210,6 +213,7 @@ public class FiveLetterWords : MonoBehaviour
 
     void Number1()
     {
+        if (!Disabler[0].activeSelf) return;
         Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[1], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[1] > TheValues[0]) && (TheValues[1] > TheValues[2]))
@@ -249,6 +253,7 @@ public class FiveLetterWords : MonoBehaviour
 
     void Number2()
     {
+        if (!Disabler[0].activeSelf) return;
         Debug.LogFormat("[Five Letter Words #{0}] You pressed {1} when the last digits of the bomb were {2}", moduleId, TheNames[2], (((int)Bomb.GetTime()) % 60).ToString());
         Audio.PlaySoundAtTransform(SFX[0].name, transform);
         if ((TheValues[2] > TheValues[0]) && (TheValues[2] > TheValues[1]))
@@ -288,6 +293,7 @@ public class FiveLetterWords : MonoBehaviour
 
     IEnumerator RouletteCheck()
     {
+        SolveIncoming = true;
         foreach (GameObject d in Disabler)
             d.SetActive(false);
 
@@ -306,12 +312,14 @@ public class FiveLetterWords : MonoBehaviour
         }
         Module.HandlePass();
         ModuleSolved = true;
+        SolveIncoming = false;
         Audio.PlaySoundAtTransform(SFX[2].name, transform);
         Debug.LogFormat("[Five Letter Words #{0}] Correct! Module solved.", moduleId);
     }
 
     IEnumerator RouletteWrong()
     {
+        StrikeIncoming = true;
         foreach (GameObject d in Disabler)
             d.SetActive(false);
 
@@ -333,6 +341,7 @@ public class FiveLetterWords : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
 
         Module.HandleStrike();
+        StrikeIncoming = false;
         Debug.LogFormat("[Five Letter Words #{0}] Incorrect! Strike! Module resetting...", moduleId);
 
         foreach (TextMesh t in WordDex)
@@ -369,6 +378,8 @@ public class FiveLetterWords : MonoBehaviour
         var positions = new string[] { "top", "middle", "bottom" };
         if (cmd[0] != "press" || !positions.Contains(cmd[1]) || !numbers.Contains(cmd[2]))
             yield break;
+        while ((((int)Bomb.GetTime()) % 60) == Array.IndexOf(numbers, cmd[2]))
+            yield return "trycancel The command to perform the action was cancelled due to a cancel request.";
         while ((((int)Bomb.GetTime()) % 60) != Array.IndexOf(numbers, cmd[2]))
             yield return "trycancel The command to perform the action was cancelled due to a cancel request.";
         yield return null;
@@ -379,15 +390,29 @@ public class FiveLetterWords : MonoBehaviour
 
     IEnumerator TwitchHandleForcedSolve()
     {
-        var mx = Array.IndexOf(TheValues, TheValues.Max());
-        var mn = TheValues.Min();
-        while ((((int)Bomb.GetTime()) % 60) != mn)
-            yield return null;
-        Selectables[mx].OnInteract();
-        while (!ModuleSolved)
+        if (StrikeIncoming)
         {
-            yield return null;
-            yield return new WaitForSeconds(.1f);
+            StopAllCoroutines();
+            foreach (TextMesh t in WordDex)
+            {
+                t.text = "YES!";
+                t.color = Color.green;
+            }
+            Module.HandlePass();
+            ModuleSolved = true;
+            Audio.PlaySoundAtTransform(SFX[2].name, transform);
+            yield break;
         }
+        if (!SolveIncoming)
+        {
+            while (!Disabler[0].activeSelf) yield return true;
+            var mx = Array.IndexOf(TheValues, TheValues.Max());
+            var mn = TheValues.Min();
+            while ((((int)Bomb.GetTime()) % 60) != mn)
+                yield return true;
+            Selectables[mx].OnInteract();
+        }
+        while (!ModuleSolved)
+            yield return true;
     }
 }
