@@ -12,6 +12,7 @@ public class FiveLetterWords : MonoBehaviour
     public KMAudio Audio;
     public KMBombInfo Bomb;
     public KMBombModule Module;
+    public KMRuleSeedable RuleSeed;
 
     public AudioClip[] SFX;
 
@@ -25,6 +26,10 @@ public class FiveLetterWords : MonoBehaviour
     private string[] TheNames = { "", "", "" };
     private bool StrikeIncoming = false;
     private bool SolveIncoming = false;
+
+    string[] RegularAlphabet = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+    int[] ConditionMet = { 2, 6, 3, 8, 1, 5, 6, 3, 7, 8, 2, 6, 8, 2, 9, 5, 9, 5, 1, 4, 9, 3, 5, 1, 4, 3 };
+    int[] ConditionNotMet = { 4, 8, 4, 6, 9, 1, 5, 3, 6, 7, 1, 3, 7, 2, 7, 8, 3, 8, 5, 9, 5, 6, 2, 2, 1, 2 };
 
     // Logging
     static int moduleIdCounter = 1;
@@ -41,127 +46,77 @@ public class FiveLetterWords : MonoBehaviour
 
     void Start()
     {
+        var RuleSeedRNG = RuleSeed.GetRNG();
+        Debug.LogFormat("[Five Letter Words #{0}] Ruleseed Number: {1}", moduleId, RuleSeedRNG.Seed.ToString());
+        if (RuleSeedRNG.Seed != 1)
+        {
+            int[] MustHave = Enumerable.Range(0, 10).ToArray();
+            int[] OtherCopies = { 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9 };
+            int[] RandomPlacement = Enumerable.Range(0, 26).ToArray();
+            for (int y = 0; y < 2; y++)
+            {
+                RuleSeedRNG.ShuffleFisherYates(MustHave);
+                RuleSeedRNG.ShuffleFisherYates(OtherCopies);
+                RuleSeedRNG.ShuffleFisherYates(RandomPlacement);
+                if (y == 0)
+                {
+                    for (int x = 0; x < ConditionMet.Length; x++)
+                    {
+                        if (x < 10)
+                        {
+                            ConditionMet[RandomPlacement[x]] = MustHave[x];
+                        }
+
+                        else
+                        {
+                            ConditionMet[RandomPlacement[x]] = OtherCopies[x - 10];
+                        }
+                    }
+                }
+
+                else
+                {
+                    for (int x = 0; x < ConditionNotMet.Length; x++)
+                    {
+                        if (x < 10)
+                        {
+                            ConditionNotMet[RandomPlacement[x]] = MustHave[x];
+                        }
+
+                        else
+                        {
+                            ConditionNotMet[RandomPlacement[x]] = OtherCopies[x - 10];
+                        }
+                    }
+                }
+            }  
+        }
         BombAnswer();
     }
 
     void BombAnswer()
     {
-		do
+        string[] TheAnswer = JsonConvert.DeserializeObject<string[]>(FiverData.text).Shuffle();
+        do
 		{
-			TheValues = new int[] { 0, 0, 0 };
-			string[] TheAnswer = JsonConvert.DeserializeObject<string[]>(FiverData.text).Shuffle();
+            TheAnswer.Shuffle();
+            TheValues = new int[] { 0, 0, 0 };
 			for (int i = 0; i < 3; i++)
 			{
-				TheNames[i] = TheAnswer[i];
+                TheNames[i] = TheAnswer[i];
 				WordDex[i].text = TheAnswer[i];
 				for (int j = 0; j < 5; j++)
 				{
 					if (Bomb.GetIndicators().Count() > 3 || Bomb.GetPortCount() > 3 || Bomb.GetBatteryCount() > 3 || Bomb.GetPortPlates().Count() > 3)
 					{
-						switch (TheAnswer[i][j].ToString())
-						{
-							case "E":
-							case "S":
-							case "X":
-								TheValues[i] = TheValues[i] + 1;
-								break;
-							case "A":
-							case "K":
-							case "N":
-								TheValues[i] = TheValues[i] + 2;
-								break;
-							case "C":
-							case "H":
-							case "V":
-							case "Z":
-								TheValues[i] = TheValues[i] + 3;
-								break;
-							case "T":
-							case "Y":
-								TheValues[i] = TheValues[i] + 4;
-								break;
-							case "F":
-							case "P":
-							case "R":
-							case "W":
-								TheValues[i] = TheValues[i] + 5;
-								break;
-							case "B":
-							case "G":
-							case "L":
-								TheValues[i] = TheValues[i] + 6;
-								break;
-							case "I":
-								TheValues[i] = TheValues[i] + 7;
-								break;
-							case "D":
-							case "J":
-							case "M":
-								TheValues[i] = TheValues[i] + 8;
-								break;
-							case "O":
-							case "Q":
-							case "U":
-								TheValues[i] = TheValues[i] + 9;
-								break;
-							default:
-								break;
-						}
-
+                        TheValues[i] = TheValues[i] + ConditionMet[Array.IndexOf(RegularAlphabet, TheAnswer[i][j].ToString())];
 					}
 
 					else
 					{
-						switch (TheAnswer[i][j].ToString())
-						{
-							case "F":
-							case "K":
-							case "Y":
-								TheValues[i] = TheValues[i] + 1;
-								break;
-							case "N":
-							case "W":
-							case "X":
-							case "Z":
-								TheValues[i] = TheValues[i] + 2;
-								break;
-							case "H":
-							case "L":
-							case "Q":
-								TheValues[i] = TheValues[i] + 3;
-								break;
-							case "A":
-							case "C":
-								TheValues[i] = TheValues[i] + 4;
-								break;
-							case "G":
-							case "S":
-							case "U":
-								TheValues[i] = TheValues[i] + 5;
-								break;
-							case "D":
-							case "I":
-							case "V":
-								TheValues[i] = TheValues[i] + 6;
-								break;
-							case "J":
-							case "M":
-							case "O":
-								TheValues[i] = TheValues[i] + 7;
-								break;
-							case "B":
-							case "P":
-							case "R":
-								TheValues[i] = TheValues[i] + 8;
-								break;
-							case "E":
-							case "T":
-								TheValues[i] = TheValues[i] + 9;
-								break;
-							default:
-								break;
-						}
-					}
+                        TheValues[i] = TheValues[i] + ConditionNotMet[Array.IndexOf(RegularAlphabet, TheAnswer[i][j].ToString())];
+
+                    }
 				}
 			}
 		}
