@@ -333,14 +333,12 @@ public class FiveLetterWords : MonoBehaviour
         var positions = new string[] { "top", "middle", "bottom" };
         if (cmd[0] != "press" || !positions.Contains(cmd[1]) || !numbers.Contains(cmd[2]))
             yield break;
-        while ((((int)Bomb.GetTime()) % 60) == Array.IndexOf(numbers, cmd[2]))
-            yield return "trycancel The command to perform the action was cancelled due to a cancel request.";
+        yield return null;
         while ((((int)Bomb.GetTime()) % 60) != Array.IndexOf(numbers, cmd[2]))
             yield return "trycancel The command to perform the action was cancelled due to a cancel request.";
-        yield return null;
+        Selectables[Array.IndexOf(positions, cmd[1])].OnInteract();
         yield return "solve";
         yield return "strike";
-        Selectables[Array.IndexOf(positions, cmd[1])].OnInteract();
     }
 
     IEnumerator TwitchHandleForcedSolve()
